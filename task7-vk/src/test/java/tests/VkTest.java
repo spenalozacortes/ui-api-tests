@@ -4,6 +4,7 @@ import config.CredentialsConfig;
 import config.EnvironmentConfig;
 import org.testng.annotations.Test;
 import pages.HomePage;
+import pages.NewsPage;
 import pages.PasswordPage;
 
 import static aquality.selenium.browser.AqualityServices.getBrowser;
@@ -14,6 +15,7 @@ public class VkTest {
     private static final String PASSWORD = CredentialsConfig.getPassword();
     private HomePage homePage;
     private PasswordPage passwordPage;
+    private NewsPage newsPage;
 
     @Test
     public void vkTest() {
@@ -26,5 +28,8 @@ public class VkTest {
         passwordPage = new PasswordPage();
         passwordPage.setPassword(PASSWORD);
         passwordPage.clickContinue();
+
+        newsPage = new NewsPage();
+        newsPage.leftMenuForm().clickMyProfile();
     }
 }
