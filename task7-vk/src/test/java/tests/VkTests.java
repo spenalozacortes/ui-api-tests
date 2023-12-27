@@ -1,18 +1,23 @@
 package tests;
 
+import api.PostSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.NewsPage;
 import pages.PasswordPage;
+import utils.RandomUtils;
 
 import static aquality.selenium.browser.AqualityServices.getBrowser;
 
-public class VkTest {
+public class VkTests extends BaseTest {
 
     private static final String USER = CredentialsConfig.getUser();
     private static final String PASSWORD = CredentialsConfig.getPassword();
+    private static final int POST_LENGTH = 100;
+    private final PostSteps postSteps = new PostSteps();
     private HomePage homePage;
     private PasswordPage passwordPage;
     private NewsPage newsPage;
@@ -31,5 +36,8 @@ public class VkTest {
 
         newsPage = new NewsPage();
         newsPage.leftMenuForm().clickMyProfile();
+
+        String postMessage = RandomUtils.generateRandomString(POST_LENGTH);
+        Response createPost = postSteps.createPost(postMessage);
     }
 }

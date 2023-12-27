@@ -16,4 +16,8 @@ public class CredentialsConfig {
     public static String getPassword() {
         return CREDENTIALS.getValue("/password").toString();
     }
+
+    public static String getAccessToken() {
+        return CREDENTIALS.getValue("/access_token").toString();
+    }
 }

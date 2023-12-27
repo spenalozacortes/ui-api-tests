@@ -1,3 +1,4 @@
 {
-  "url": "https://vk.com/"
+  "url": "https://vk.com/",
+  "baseUri": "https://api.vk.com/method"
 }
