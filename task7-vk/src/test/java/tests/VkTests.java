@@ -3,7 +3,6 @@ package tests;
 import api.PostSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
-import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.NewsPage;
@@ -38,6 +37,8 @@ public class VkTests extends BaseTest {
         newsPage.leftMenuForm().clickMyProfile();
 
         String postMessage = RandomUtils.generateRandomString(POST_LENGTH);
-        Response createPost = postSteps.createPost(postMessage);
+        postSteps.createPost(postMessage);
+        String editedMessage = RandomUtils.generateRandomString(POST_LENGTH);
+        postSteps.editPost(10, editedMessage);
     }
 }

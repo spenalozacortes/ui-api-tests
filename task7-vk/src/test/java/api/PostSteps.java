@@ -12,4 +12,12 @@ public class PostSteps extends BaseSteps {
                 .when()
                 .post(Endpoints.CREATE_POST);
     }
+
+    public Response editPost(int id, String message) {
+        return getBaseReq()
+                .queryParam(Parameters.POST_ID, id)
+                .queryParam(Parameters.MESSAGE, message)
+                .when()
+                .post(Endpoints.EDIT_POST);
+    }
 }
