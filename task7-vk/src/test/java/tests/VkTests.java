@@ -66,5 +66,7 @@ public class VkTests extends BaseTest {
         myProfilePage.clickLikeBtn();
 
         wallSteps.getLikesFromPost(postId);
+
+        wallSteps.deletePost(postId);
     }
 }

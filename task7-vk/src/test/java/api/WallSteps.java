@@ -45,4 +45,13 @@ public class WallSteps extends BaseSteps {
                 .when()
                 .get(Endpoints.GET_LIKES);
     }
+
+    public Response deletePost(int id) {
+        return getBaseReq()
+                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
+                .queryParam(Parameters.VERSION, VERSION)
+                .queryParam(Parameters.POST_ID, id)
+                .when()
+                .post(Endpoints.DELETE_POST);
+    }
 }
