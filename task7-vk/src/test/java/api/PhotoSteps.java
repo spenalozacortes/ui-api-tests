@@ -32,7 +32,7 @@ public class PhotoSteps extends BaseSteps {
 
     public Response saveFile(String path) {
         Response transferFileResponse = transferFile(path);
-        String server = JsonPathUtils.getValueFromResponseByKey(transferFileResponse, "server");
+        int server = JsonPathUtils.getValueFromResponseByKey(transferFileResponse, "server");
         String photo = JsonPathUtils.getValueFromResponseByKey(transferFileResponse, "photo");
         String hash = JsonPathUtils.getValueFromResponseByKey(transferFileResponse, "hash");
         return getBaseReq()

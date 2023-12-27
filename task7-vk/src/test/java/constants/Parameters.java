@@ -11,4 +11,5 @@ public class Parameters {
     public static final String SERVER = "server";
     public static final String PHOTO = "photo";
     public static final String HASH = "hash";
+    public static final String ATTACHMENTS = "attachments";
 }

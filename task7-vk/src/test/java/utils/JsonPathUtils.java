@@ -7,8 +7,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class JsonPathUtils {
 
-    public static String getValueFromResponseByKey(Response response, String key) {
+    public static <T> T getValueFromResponseByKey(Response response, String key) {
         JsonPath js = new JsonPath(response.asString());
-        return js.getString(key);
+        return js.get(key);
     }
 }

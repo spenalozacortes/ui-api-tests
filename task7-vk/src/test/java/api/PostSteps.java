@@ -15,12 +15,13 @@ public class PostSteps extends BaseSteps {
                 .post(Endpoints.CREATE_POST);
     }
 
-    public Response editPost(int id, String message) {
+    public Response editPost(int id, String message, String attachment) {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.POST_ID, id)
                 .queryParam(Parameters.MESSAGE, message)
+                .queryParam(Parameters.ATTACHMENTS, attachment)
                 .when()
                 .post(Endpoints.EDIT_POST);
     }

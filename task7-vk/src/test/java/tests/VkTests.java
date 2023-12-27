@@ -4,12 +4,14 @@ import api.PhotoSteps;
 import api.PostSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.MyProfilePage;
 import pages.NewsPage;
 import pages.PasswordPage;
+import utils.JsonPathUtils;
 import utils.RandomUtils;
 
 import static aquality.selenium.browser.AqualityServices.getBrowser;
@@ -18,7 +20,7 @@ public class VkTests extends BaseTest {
 
     private static final String USER = CredentialsConfig.getUser();
     private static final String PASSWORD = CredentialsConfig.getPassword();
-    private static final int POST_LENGTH = 100;
+    private static final int POST_LENGTH = 200;
     private final PostSteps postSteps = new PostSteps();
     private final PhotoSteps photoSteps = new PhotoSteps();
     private HomePage homePage;
@@ -48,9 +50,12 @@ public class VkTests extends BaseTest {
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
         String postMessage = RandomUtils.generateRandomString(POST_LENGTH);
         postSteps.createPost(postMessage);
-        String editedMessage = RandomUtils.generateRandomString(POST_LENGTH);
-        postSteps.editPost(12, editedMessage);
 
-        photoSteps.saveFile("src/test/resources/eviljenkins.PNG");
+        String editedMessage = RandomUtils.generateRandomString(POST_LENGTH);
+        Response savePhoto = photoSteps.saveFile("src/test/resources/eviljenkins.PNG");
+        int ownerId = JsonPathUtils.getValueFromResponseByKey(savePhoto, "response[0].owner_id");
+        int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, "response[0].id");
+        String attachment = String.format("photo%d_%d", ownerId, photoId);
+        postSteps.editPost(12, editedMessage, attachment);
     }
 }
