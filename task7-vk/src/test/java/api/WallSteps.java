@@ -26,7 +26,7 @@ public class WallSteps extends BaseSteps {
                 .post(Endpoints.EDIT_POST);
     }
 
-    public Response addComment(int id, String comment) {
+    public Response addCommentToPost(int id, String comment) {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
@@ -34,5 +34,15 @@ public class WallSteps extends BaseSteps {
                 .queryParam(Parameters.MESSAGE, comment)
                 .when()
                 .post(Endpoints.ADD_COMMENT);
+    }
+
+    public Response getLikesFromPost(int id) {
+        return getBaseReq()
+                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
+                .queryParam(Parameters.VERSION, VERSION)
+                .queryParam(Parameters.TYPE, "post")
+                .queryParam(Parameters.ITEM_ID, id)
+                .when()
+                .get(Endpoints.GET_LIKES);
     }
 }

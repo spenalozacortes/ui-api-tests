@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 public class MyProfilePage extends Form {
 
-    private final IButton likeBtn = getElementFactory().getButton(By.xpath("//div[contains(@class,'PostButtonReactions__icon')]"), "Like button");
+    private final IButton likeBtn = getElementFactory().getButton(By.xpath("//*[contains(@class,'PostButtonReactions')]"), "Like button");
 
     public MyProfilePage() {
         super(By.className("ProfileWrapper"), "My Profile page");

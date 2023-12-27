@@ -50,7 +50,7 @@ public class VkTests extends BaseTest {
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
         String postMessage = RandomUtils.generateRandomString(POST_LENGTH);
-        // wallSteps.createPost(postMessage);
+        wallSteps.createPost(postMessage);
 
         int postId = 12;
         int ownerId = 841084343;
@@ -61,8 +61,10 @@ public class VkTests extends BaseTest {
         wallSteps.editPost(postId, editedMessage, attachment);
 
         String comment = RandomUtils.generateRandomString(COMMENT_LENGTH);
-        // wallSteps.addComment(postId, comment);
+        wallSteps.addCommentToPost(postId, comment);
 
         myProfilePage.clickLikeBtn();
+
+        wallSteps.getLikesFromPost(postId);
     }
 }

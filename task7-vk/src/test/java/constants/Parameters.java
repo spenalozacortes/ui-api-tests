@@ -12,4 +12,6 @@ public class Parameters {
     public static final String PHOTO = "photo";
     public static final String HASH = "hash";
     public static final String ATTACHMENTS = "attachments";
+    public static final String TYPE = "type";
+    public static final String ITEM_ID = "item_id";
 }
