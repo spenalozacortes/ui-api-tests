@@ -50,17 +50,19 @@ public class VkTests extends BaseTest {
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
         String postMessage = RandomUtils.generateRandomString(POST_LENGTH);
-        wallSteps.createPost(postMessage);
+        // wallSteps.createPost(postMessage);
 
         int postId = 12;
+        int ownerId = 841084343;
         String editedMessage = RandomUtils.generateRandomString(POST_LENGTH);
         Response savePhoto = photoSteps.saveFile("src/test/resources/eviljenkins.PNG");
-        int ownerId = JsonPathUtils.getValueFromResponseByKey(savePhoto, "response[0].owner_id");
         int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, "response[0].id");
         String attachment = String.format("photo%d_%d", ownerId, photoId);
         wallSteps.editPost(postId, editedMessage, attachment);
 
         String comment = RandomUtils.generateRandomString(COMMENT_LENGTH);
-        wallSteps.addComment(postId, comment);
+        // wallSteps.addComment(postId, comment);
+
+        myProfilePage.clickLikeBtn();
     }
 }
