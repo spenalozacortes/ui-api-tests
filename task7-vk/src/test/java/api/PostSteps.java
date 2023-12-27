@@ -8,6 +8,8 @@ public class PostSteps extends BaseSteps {
 
     public Response createPost(String message) {
         return getBaseReq()
+                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
+                .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.MESSAGE, message)
                 .when()
                 .post(Endpoints.CREATE_POST);
@@ -15,6 +17,8 @@ public class PostSteps extends BaseSteps {
 
     public Response editPost(int id, String message) {
         return getBaseReq()
+                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
+                .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.POST_ID, id)
                 .queryParam(Parameters.MESSAGE, message)
                 .when()

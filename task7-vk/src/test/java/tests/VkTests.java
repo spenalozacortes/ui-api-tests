@@ -1,5 +1,6 @@
 package tests;
 
+import api.PhotoSteps;
 import api.PostSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
@@ -19,6 +20,7 @@ public class VkTests extends BaseTest {
     private static final String PASSWORD = CredentialsConfig.getPassword();
     private static final int POST_LENGTH = 100;
     private final PostSteps postSteps = new PostSteps();
+    private final PhotoSteps photoSteps = new PhotoSteps();
     private HomePage homePage;
     private PasswordPage passwordPage;
     private NewsPage newsPage;
@@ -48,5 +50,7 @@ public class VkTests extends BaseTest {
         postSteps.createPost(postMessage);
         String editedMessage = RandomUtils.generateRandomString(POST_LENGTH);
         postSteps.editPost(12, editedMessage);
+
+        photoSteps.saveFile("src/test/resources/eviljenkins.PNG");
     }
 }
