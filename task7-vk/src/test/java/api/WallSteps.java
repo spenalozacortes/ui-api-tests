@@ -2,6 +2,7 @@ package api;
 
 import constants.Endpoints;
 import constants.Parameters;
+import constants.Values;
 import io.restassured.response.Response;
 
 public class WallSteps extends BaseSteps {
@@ -40,7 +41,7 @@ public class WallSteps extends BaseSteps {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
-                .queryParam(Parameters.TYPE, "post")
+                .queryParam(Parameters.TYPE, Values.POST)
                 .queryParam(Parameters.ITEM_ID, id)
                 .when()
                 .get(Endpoints.GET_LIKES);

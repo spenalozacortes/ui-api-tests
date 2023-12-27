@@ -4,6 +4,8 @@ import api.PhotoSteps;
 import api.WallSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
+import constants.Keys;
+import constants.Constants;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -20,8 +22,6 @@ public class VkTests extends BaseTest {
 
     private static final String USER = CredentialsConfig.getUser();
     private static final String PASSWORD = CredentialsConfig.getPassword();
-    private static final int POST_LENGTH = 200;
-    private static final int COMMENT_LENGTH = 50;
     private final WallSteps wallSteps = new WallSteps();
     private final PhotoSteps photoSteps = new PhotoSteps();
     private HomePage homePage;
@@ -49,18 +49,18 @@ public class VkTests extends BaseTest {
 
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
-        String postMessage = RandomUtils.generateRandomString(POST_LENGTH);
+        String postMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         wallSteps.createPost(postMessage);
 
         int postId = 12;
         int ownerId = 841084343;
-        String editedMessage = RandomUtils.generateRandomString(POST_LENGTH);
-        Response savePhoto = photoSteps.saveFile("src/test/resources/eviljenkins.PNG");
-        int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, "response[0].id");
+        String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
+        Response savePhoto = photoSteps.saveFile(Constants.IMAGE_PATH);
+        int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
         String attachment = String.format("photo%d_%d", ownerId, photoId);
         wallSteps.editPost(postId, editedMessage, attachment);
 
-        String comment = RandomUtils.generateRandomString(COMMENT_LENGTH);
+        String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
         wallSteps.addCommentToPost(postId, comment);
 
         myProfilePage.clickLikeBtn();
