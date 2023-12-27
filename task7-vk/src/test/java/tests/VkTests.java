@@ -1,7 +1,7 @@
 package tests;
 
 import api.PhotoSteps;
-import api.PostSteps;
+import api.WallSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
 import io.restassured.response.Response;
@@ -21,7 +21,8 @@ public class VkTests extends BaseTest {
     private static final String USER = CredentialsConfig.getUser();
     private static final String PASSWORD = CredentialsConfig.getPassword();
     private static final int POST_LENGTH = 200;
-    private final PostSteps postSteps = new PostSteps();
+    private static final int COMMENT_LENGTH = 50;
+    private final WallSteps wallSteps = new WallSteps();
     private final PhotoSteps photoSteps = new PhotoSteps();
     private HomePage homePage;
     private PasswordPage passwordPage;
@@ -49,13 +50,17 @@ public class VkTests extends BaseTest {
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
         String postMessage = RandomUtils.generateRandomString(POST_LENGTH);
-        postSteps.createPost(postMessage);
+        wallSteps.createPost(postMessage);
 
+        int postId = 12;
         String editedMessage = RandomUtils.generateRandomString(POST_LENGTH);
         Response savePhoto = photoSteps.saveFile("src/test/resources/eviljenkins.PNG");
         int ownerId = JsonPathUtils.getValueFromResponseByKey(savePhoto, "response[0].owner_id");
         int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, "response[0].id");
         String attachment = String.format("photo%d_%d", ownerId, photoId);
-        postSteps.editPost(12, editedMessage, attachment);
+        wallSteps.editPost(postId, editedMessage, attachment);
+
+        String comment = RandomUtils.generateRandomString(COMMENT_LENGTH);
+        wallSteps.addComment(postId, comment);
     }
 }
