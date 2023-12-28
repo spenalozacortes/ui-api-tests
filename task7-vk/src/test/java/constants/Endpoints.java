@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Endpoints {
+    public static final String GET_USER = "/users.get";
     public static final String CREATE_POST = "/wall.post";
     public static final String EDIT_POST = "/wall.edit";
     public static final String DELETE_POST = "/wall.delete";

@@ -1,6 +1,7 @@
 package tests;
 
 import api.PhotoSteps;
+import api.UserSteps;
 import api.WallSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
@@ -22,6 +23,7 @@ public class VkTests extends BaseTest {
 
     private static final String USER = CredentialsConfig.getUser();
     private static final String PASSWORD = CredentialsConfig.getPassword();
+    private final UserSteps userSteps = new UserSteps();
     private final WallSteps wallSteps = new WallSteps();
     private final PhotoSteps photoSteps = new PhotoSteps();
     private HomePage homePage;
@@ -49,10 +51,12 @@ public class VkTests extends BaseTest {
 
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
+
         String postMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         Response createPost = wallSteps.createPost(postMessage);
-        String ownerId = "841084343";
         int postId = ResponseUtils.getValueFromResponseByKey(createPost, Keys.POST_ID);
+        Response user = userSteps.getUser();
+        String ownerId = ResponseUtils.getValueFromResponseByKey(user, Keys.USER_ID).toString();
         Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
         Assert.assertEquals(myProfilePage.getAuthorId(), ownerId, "Post author is incorrect");
 
