@@ -8,4 +8,5 @@ public class Keys {
     public static final String PHOTO = "photo";
     public static final String HASH = "hash";
     public static final String PHOTO_ID = "response[0].id";
+    public static final String LIKE_USER_ID = "response.items[0]";
 }

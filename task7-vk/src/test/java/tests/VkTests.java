@@ -54,11 +54,11 @@ public class VkTests extends BaseTest {
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
 
+        Response user = userSteps.getUser();
+        String ownerId = ResponseUtils.getValueFromResponseByKey(user, Keys.USER_ID).toString();
         String postMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         Response createPost = wallSteps.createPost(postMessage);
         int postId = ResponseUtils.getValueFromResponseByKey(createPost, Keys.POST_ID);
-        Response user = userSteps.getUser();
-        String ownerId = ResponseUtils.getValueFromResponseByKey(user, Keys.USER_ID).toString();
         Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
         Assert.assertTrue(myProfilePage.getAuthor().contains(ownerId), "Post author is incorrect");
 
@@ -70,13 +70,15 @@ public class VkTests extends BaseTest {
         Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text wasn't updated");
         Assert.assertTrue(myProfilePage.getPhoto().contains(photo), "Photos are not the same");
 
-       String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
-       wallSteps.addCommentToPost(postId, comment);
-       Assert.assertTrue(myProfilePage.getReplyAuthor().contains(ownerId), "Comment from incorrect user");
+        String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
+        wallSteps.addCommentToPost(postId, comment);
+        Assert.assertTrue(myProfilePage.getReplyAuthor().contains(ownerId), "Comment from incorrect user");
 
-//       myProfilePage.clickLikeBtn();
-//       Response likes = wallSteps.getLikesFromPost(postId);
-//
+        myProfilePage.clickLikeBtn();
+        Response likes = wallSteps.getLikesFromPost(postId);
+        String likeUserId = ResponseUtils.getValueFromResponseByKey(likes, Keys.LIKE_USER_ID).toString();
+        Assert.assertEquals(likeUserId, ownerId, "Like from incorrect user");
+
 //        wallSteps.deletePost(postId);
     }
 }
