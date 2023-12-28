@@ -5,6 +5,7 @@ import api.UserSteps;
 import api.WallSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
+import config.TestDataConfig;
 import constants.Keys;
 import constants.Constants;
 import io.restassured.response.Response;
@@ -23,6 +24,7 @@ public class VkTests extends BaseTest {
 
     private static final String USER = CredentialsConfig.getUser();
     private static final String PASSWORD = CredentialsConfig.getPassword();
+    private static final String IMAGE_PATH = TestDataConfig.getImagePath();
     private final UserSteps userSteps = new UserSteps();
     private final WallSteps wallSteps = new WallSteps();
     private final PhotoSteps photoSteps = new PhotoSteps();
@@ -60,11 +62,12 @@ public class VkTests extends BaseTest {
         Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
         Assert.assertEquals(myProfilePage.getAuthorId(), ownerId, "Post author is incorrect");
 
-//        String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
-//        Response savePhoto = photoSteps.saveFile(Constants.IMAGE_PATH);
-//        int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
-//        String attachment = String.format("photo%d_%d", ownerId, photoId);
-//        wallSteps.editPost(postId, editedMessage, attachment);
+        String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
+        Response savePhoto = photoSteps.saveFile(IMAGE_PATH);
+        int photoId = ResponseUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
+        String attachment = String.format("photo%s_%d", ownerId, photoId);
+        wallSteps.editPost(postId, editedMessage, attachment);
+        Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text wasn't updated");
 //
 //        String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
 //        wallSteps.addCommentToPost(postId, comment);
