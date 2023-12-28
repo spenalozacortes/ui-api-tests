@@ -60,7 +60,7 @@ public class VkTests extends BaseTest {
         Response user = userSteps.getUser();
         String ownerId = ResponseUtils.getValueFromResponseByKey(user, Keys.USER_ID).toString();
         Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
-        Assert.assertEquals(myProfilePage.getAuthorId(), ownerId, "Post author is incorrect");
+        Assert.assertTrue(myProfilePage.getAuthor().contains(ownerId), "Post author is incorrect");
 
         String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         Response savePhoto = photoSteps.saveFile(IMAGE_PATH);
@@ -69,13 +69,13 @@ public class VkTests extends BaseTest {
         wallSteps.editPost(postId, editedMessage, photo);
         Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text wasn't updated");
         Assert.assertTrue(myProfilePage.getPhoto().contains(photo), "Photos are not the same");
-//
-//        String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
-//        wallSteps.addCommentToPost(postId, comment);
-//
-//        myProfilePage.clickLikeBtn();
-//
-//        wallSteps.getLikesFromPost(postId);
+
+       String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
+       wallSteps.addCommentToPost(postId, comment);
+       Assert.assertTrue(myProfilePage.getReplyAuthor().contains(ownerId), "Comment from incorrect user");
+
+//       myProfilePage.clickLikeBtn();
+//       Response likes = wallSteps.getLikesFromPost(postId);
 //
 //        wallSteps.deletePost(postId);
     }
