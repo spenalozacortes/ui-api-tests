@@ -10,8 +10,9 @@ public class MyProfilePage extends Form {
 
     private final IButton likeBtn = getElementFactory().getButton(By.xpath("//*[contains(@class,'PostButtonReactions')]"), "Like button");
     private final ILabel postText = getElementFactory().getLabel(By.className("wall_post_text"), "Post text");
-    private final ILink authorLink = getElementFactory().getLink(By.className("PostHeaderTitle__authorLink"), "Author link");
+    private final ILabel authorLabel = getElementFactory().getLabel(By.xpath("//*[contains(@class, 'wall_post_cont')]"), "Author label");
     private final ILink photoLink = getElementFactory().getLink(By.xpath("//a[contains(@class,'image_cover')]"), "Image link");
+    private final ILink nextCommentLink = getElementFactory().getLink(By.xpath("//a[contains(@class, 'replies_next')]"), "Show next comment link");
     private final ILink replyAuthorLink = getElementFactory().getLink(By.xpath("//*[@class='reply_author']//a[contains(@class, 'author')]"), "Reply author link");
 
     public MyProfilePage() {
@@ -27,11 +28,15 @@ public class MyProfilePage extends Form {
     }
 
     public String getAuthor() {
-        return authorLink.getHref();
+        return authorLabel.getAttribute("id");
     }
 
     public String getPhoto() {
         return photoLink.getHref();
+    }
+
+    public void clickNextCommentLink() {
+        nextCommentLink.click();
     }
 
     public String getReplyAuthor() {

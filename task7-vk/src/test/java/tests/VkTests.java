@@ -72,6 +72,7 @@ public class VkTests extends BaseTest {
 
         String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
         wallSteps.addCommentToPost(postId, comment);
+        myProfilePage.clickNextCommentLink();
         Assert.assertTrue(myProfilePage.getReplyAuthor().contains(ownerId), "Comment is from incorrect user");
 
         myProfilePage.clickLikeBtn();
