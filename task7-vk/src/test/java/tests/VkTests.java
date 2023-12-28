@@ -67,18 +67,19 @@ public class VkTests extends BaseTest {
         int photoId = ResponseUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
         String photo = String.format("photo%s_%d", ownerId, photoId);
         wallSteps.editPost(postId, editedMessage, photo);
-        Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text wasn't updated");
+        Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text is not updated");
         Assert.assertTrue(myProfilePage.getPhoto().contains(photo), "Photos are not the same");
 
         String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
         wallSteps.addCommentToPost(postId, comment);
-        Assert.assertTrue(myProfilePage.getReplyAuthor().contains(ownerId), "Comment from incorrect user");
+        Assert.assertTrue(myProfilePage.getReplyAuthor().contains(ownerId), "Comment is from incorrect user");
 
         myProfilePage.clickLikeBtn();
         Response likes = wallSteps.getLikesFromPost(postId);
         String likeUserId = ResponseUtils.getValueFromResponseByKey(likes, Keys.LIKE_USER_ID).toString();
-        Assert.assertEquals(likeUserId, ownerId, "Like from incorrect user");
+        Assert.assertEquals(likeUserId, ownerId, "Like is from incorrect user");
 
-//        wallSteps.deletePost(postId);
+        wallSteps.deletePost(postId);
+        Assert.assertFalse(myProfilePage.isPostDisplayed(), "Post is not deleted");
     }
 }

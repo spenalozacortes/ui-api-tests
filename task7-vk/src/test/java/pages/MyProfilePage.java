@@ -37,4 +37,8 @@ public class MyProfilePage extends Form {
     public String getReplyAuthor() {
         return replyAuthorLink.getHref();
     }
+
+    public boolean isPostDisplayed() {
+        return postText.state().isDisplayed();
+    }
 }
