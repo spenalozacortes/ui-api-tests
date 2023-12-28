@@ -65,9 +65,10 @@ public class VkTests extends BaseTest {
         String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         Response savePhoto = photoSteps.saveFile(IMAGE_PATH);
         int photoId = ResponseUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
-        String attachment = String.format("photo%s_%d", ownerId, photoId);
-        wallSteps.editPost(postId, editedMessage, attachment);
+        String photo = String.format("photo%s_%d", ownerId, photoId);
+        wallSteps.editPost(postId, editedMessage, photo);
         Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text wasn't updated");
+        Assert.assertTrue(myProfilePage.getPhoto().contains(photo), "Photos are not the same");
 //
 //        String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
 //        wallSteps.addCommentToPost(postId, comment);
