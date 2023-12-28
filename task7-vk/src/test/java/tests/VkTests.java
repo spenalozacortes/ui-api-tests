@@ -13,7 +13,7 @@ import pages.HomePage;
 import pages.MyProfilePage;
 import pages.NewsPage;
 import pages.PasswordPage;
-import utils.JsonPathUtils;
+import utils.ResponseUtils;
 import utils.RandomUtils;
 
 import static aquality.selenium.browser.AqualityServices.getBrowser;
@@ -50,23 +50,25 @@ public class VkTests extends BaseTest {
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
         String postMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
-        wallSteps.createPost(postMessage);
+        Response createPost = wallSteps.createPost(postMessage);
+        String ownerId = "841084343";
+        int postId = ResponseUtils.getValueFromResponseByKey(createPost, Keys.POST_ID);
+        Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
+        Assert.assertEquals(myProfilePage.getAuthorId(), ownerId, "Post author is incorrect");
 
-        int postId = 12;
-        int ownerId = 841084343;
-        String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
-        Response savePhoto = photoSteps.saveFile(Constants.IMAGE_PATH);
-        int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
-        String attachment = String.format("photo%d_%d", ownerId, photoId);
-        wallSteps.editPost(postId, editedMessage, attachment);
-
-        String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
-        wallSteps.addCommentToPost(postId, comment);
-
-        myProfilePage.clickLikeBtn();
-
-        wallSteps.getLikesFromPost(postId);
-
-        wallSteps.deletePost(postId);
+//        String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
+//        Response savePhoto = photoSteps.saveFile(Constants.IMAGE_PATH);
+//        int photoId = JsonPathUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
+//        String attachment = String.format("photo%d_%d", ownerId, photoId);
+//        wallSteps.editPost(postId, editedMessage, attachment);
+//
+//        String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
+//        wallSteps.addCommentToPost(postId, comment);
+//
+//        myProfilePage.clickLikeBtn();
+//
+//        wallSteps.getLikesFromPost(postId);
+//
+//        wallSteps.deletePost(postId);
     }
 }

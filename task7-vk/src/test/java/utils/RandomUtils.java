@@ -7,7 +7,7 @@ import java.util.Random;
 @UtilityClass
 public class RandomUtils {
 
-    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyz ";
+    private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyz";
 
     public static int getRandomInt(int range) {
         Random random = new Random();

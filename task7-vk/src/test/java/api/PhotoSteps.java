@@ -5,7 +5,7 @@ import constants.Keys;
 import constants.Parameters;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import utils.JsonPathUtils;
+import utils.ResponseUtils;
 
 import java.io.File;
 
@@ -23,7 +23,7 @@ public class PhotoSteps extends BaseSteps {
 
     public Response transferFile(String path) {
         Response uploadServerResponse = getUploadServer();
-        String uploadUrl = JsonPathUtils.getValueFromResponseByKey(uploadServerResponse, Keys.UPLOAD_URL);
+        String uploadUrl = ResponseUtils.getValueFromResponseByKey(uploadServerResponse, Keys.UPLOAD_URL);
         return given()
                 .contentType(ContentType.MULTIPART)
                 .multiPart(Parameters.PHOTO, new File(path))
@@ -33,9 +33,9 @@ public class PhotoSteps extends BaseSteps {
 
     public Response saveFile(String path) {
         Response transferFileResponse = transferFile(path);
-        int server = JsonPathUtils.getValueFromResponseByKey(transferFileResponse, Keys.SERVER);
-        String photo = JsonPathUtils.getValueFromResponseByKey(transferFileResponse, Keys.PHOTO);
-        String hash = JsonPathUtils.getValueFromResponseByKey(transferFileResponse, Keys.HASH);
+        int server = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.SERVER);
+        String photo = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.PHOTO);
+        String hash = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.HASH);
         return getBaseReq()
                 .contentType(ContentType.MULTIPART)
                 .multiPart(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
