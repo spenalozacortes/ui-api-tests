@@ -1,15 +1,13 @@
 package api;
 
 import constants.Endpoints;
-import constants.Keys;
 import constants.Parameters;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import models.PhotoResponse;
+import models.TransferFileResponse;
 import models.UploadServerResponse;
 import org.apache.http.HttpStatus;
 import utils.JsonMapperUtils;
-import utils.ResponseUtils;
 
 import java.io.File;
 
@@ -28,9 +26,9 @@ public class PhotoSteps extends BaseSteps {
         return JsonMapperUtils.deserialize(response, RESPONSE_PATH, UploadServerResponse.class);
     }
 
-    public Response transferFile(String path) {
+    public TransferFileResponse transferFile(String path) {
         String uploadUrl = getUploadServer().getUploadUrl();
-        return given()
+        String response = given()
                 .contentType(ContentType.MULTIPART)
                 .multiPart(Parameters.PHOTO, new File(path))
                 .when()
@@ -38,18 +36,16 @@ public class PhotoSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response().asString();
+        return JsonMapperUtils.deserialize(response, TransferFileResponse.class);
     }
 
     public PhotoResponse saveFile(String path) {
-        Response transferFileResponse = transferFile(path);
-        int server = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.SERVER);
-        String photo = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.PHOTO);
-        String hash = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.HASH);
+        TransferFileResponse transferFileResponse = transferFile(path);
         String response = getBaseReqMultipart()
-                .multiPart(Parameters.SERVER, server)
-                .multiPart(Parameters.PHOTO, photo)
-                .multiPart(Parameters.HASH, hash)
+                .multiPart(Parameters.SERVER, transferFileResponse.getServer())
+                .multiPart(Parameters.PHOTO, transferFileResponse.getPhoto())
+                .multiPart(Parameters.HASH, transferFileResponse.getHash())
                 .when()
                 .post(Endpoints.SAVE_PHOTO)
                 .then()

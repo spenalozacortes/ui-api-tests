@@ -21,4 +21,14 @@ public class JsonMapperUtils {
             throw new RuntimeException(e);
         }
     }
+
+    public static <T> T deserialize(String json, Class<T> targetClass) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(json);
+            return mapper.treeToValue(rootNode, targetClass);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
