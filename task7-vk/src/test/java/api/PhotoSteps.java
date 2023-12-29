@@ -8,6 +8,7 @@ import io.restassured.response.Response;
 import models.PhotoResponse;
 import models.UploadServerResponse;
 import org.apache.http.HttpStatus;
+import utils.JsonMapperUtils;
 import utils.ResponseUtils;
 
 import java.io.File;
@@ -17,18 +18,18 @@ import static io.restassured.RestAssured.given;
 public class PhotoSteps extends BaseSteps {
 
     public UploadServerResponse getUploadServer() {
-        return getBaseReq()
+        String response = getBaseReq()
                 .when()
                 .get(Endpoints.GET_UPLOAD_SERVER)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response()
-                .as(UploadServerResponse.class);
+                .extract().response().asString();
+        return JsonMapperUtils.deserialize(response, RESPONSE_PATH, UploadServerResponse.class);
     }
 
     public Response transferFile(String path) {
-        String uploadUrl = getUploadServer().getResponse().getUpload_url();
+        String uploadUrl = getUploadServer().getUploadUrl();
         return given()
                 .contentType(ContentType.MULTIPART)
                 .multiPart(Parameters.PHOTO, new File(path))
@@ -45,7 +46,7 @@ public class PhotoSteps extends BaseSteps {
         int server = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.SERVER);
         String photo = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.PHOTO);
         String hash = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.HASH);
-        return getBaseReqMultipart()
+        String response = getBaseReqMultipart()
                 .multiPart(Parameters.SERVER, server)
                 .multiPart(Parameters.PHOTO, photo)
                 .multiPart(Parameters.HASH, hash)
@@ -54,7 +55,7 @@ public class PhotoSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response()
-                .as(PhotoResponse.class);
+                .extract().response().asString();
+        return JsonMapperUtils.deserialize(response, RESPONSE_PATH, PhotoResponse.class);
     }
 }

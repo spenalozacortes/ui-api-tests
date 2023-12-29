@@ -1,8 +1,10 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class PostResponse {
-    private Post response;
+    @JsonProperty("post_id")
+    private int postId;
 }

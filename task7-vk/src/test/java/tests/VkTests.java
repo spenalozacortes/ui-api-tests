@@ -6,7 +6,7 @@ import config.CredentialsConfig;
 import config.EnvironmentConfig;
 import config.TestDataConfig;
 import constants.Constants;
-import models.LikesResponse;
+import models.LikeResponse;
 import models.PhotoResponse;
 import models.PostResponse;
 import org.testng.Assert;
@@ -54,14 +54,14 @@ public class VkTests extends BaseTest {
 
         String postMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         PostResponse post = wallSteps.createPost(postMessage);
-        int postId = post.getResponse().getPost_id();
+        int postId = post.getPostId();
         int ownerId = CredentialsConfig.getOwnerId();
         Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
         Assert.assertTrue(myProfilePage.getAuthor().contains(String.valueOf(ownerId)), "Post author is incorrect");
 
         String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         PhotoResponse savePhoto = photoSteps.saveFile(IMAGE_PATH);
-        int photoId = savePhoto.getResponse().get(0).getId();
+        int photoId = savePhoto.getId();
         String photo = String.format("photo%d_%d", ownerId, photoId);
         wallSteps.editPost(postId, editedMessage, photo);
         Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text is not updated");
@@ -73,8 +73,8 @@ public class VkTests extends BaseTest {
         Assert.assertTrue(myProfilePage.getReplyAuthor().contains(String.valueOf(ownerId)), "Comment is from incorrect user");
 
         myProfilePage.clickLikeBtn();
-        LikesResponse isLiked = wallSteps.getIsLiked(postId, ownerId);
-        Assert.assertEquals(isLiked.getResponse().getLiked(), Constants.LIKED, "Like is not from expected user");
+        LikeResponse isLiked = wallSteps.getIsLiked(postId, ownerId);
+        Assert.assertEquals(isLiked.getLiked(), Constants.LIKED, "No like from expected user");
 
         wallSteps.deletePost(postId);
         Assert.assertFalse(myProfilePage.isPostDisplayed(), "Post is not deleted");
