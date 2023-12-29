@@ -5,6 +5,8 @@ import constants.Keys;
 import constants.Parameters;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import models.PhotoResponse;
+import models.UploadServerResponse;
 import org.apache.http.HttpStatus;
 import utils.ResponseUtils;
 
@@ -14,7 +16,7 @@ import static io.restassured.RestAssured.given;
 
 public class PhotoSteps extends BaseSteps {
 
-    public Response getUploadServer() {
+    public UploadServerResponse getUploadServer() {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
@@ -23,12 +25,12 @@ public class PhotoSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response()
+                .as(UploadServerResponse.class);
     }
 
     public Response transferFile(String path) {
-        Response uploadServerResponse = getUploadServer();
-        String uploadUrl = ResponseUtils.getValueFromResponseByKey(uploadServerResponse, Keys.UPLOAD_URL);
+        String uploadUrl = getUploadServer().getResponse().getUpload_url();
         return given()
                 .contentType(ContentType.MULTIPART)
                 .multiPart(Parameters.PHOTO, new File(path))
@@ -40,7 +42,7 @@ public class PhotoSteps extends BaseSteps {
                 .extract().response();
     }
 
-    public Response saveFile(String path) {
+    public PhotoResponse saveFile(String path) {
         Response transferFileResponse = transferFile(path);
         int server = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.SERVER);
         String photo = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.PHOTO);
@@ -57,6 +59,7 @@ public class PhotoSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response()
+                .as(PhotoResponse.class);
     }
 }

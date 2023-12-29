@@ -1,21 +1,20 @@
 package tests;
 
 import api.PhotoSteps;
-import api.UserSteps;
 import api.WallSteps;
 import config.CredentialsConfig;
 import config.EnvironmentConfig;
 import config.TestDataConfig;
-import constants.Keys;
 import constants.Constants;
-import io.restassured.response.Response;
+import models.LikesResponse;
+import models.PhotoResponse;
+import models.PostResponse;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.MyProfilePage;
 import pages.NewsPage;
 import pages.PasswordPage;
-import utils.ResponseUtils;
 import utils.RandomUtils;
 
 import static aquality.selenium.browser.AqualityServices.getBrowser;
@@ -25,7 +24,6 @@ public class VkTests extends BaseTest {
     private static final String USER = CredentialsConfig.getUser();
     private static final String PASSWORD = CredentialsConfig.getPassword();
     private static final String IMAGE_PATH = TestDataConfig.getImagePath();
-    private final UserSteps userSteps = new UserSteps();
     private final WallSteps wallSteps = new WallSteps();
     private final PhotoSteps photoSteps = new PhotoSteps();
     private HomePage homePage;
@@ -54,18 +52,17 @@ public class VkTests extends BaseTest {
         myProfilePage = new MyProfilePage();
         Assert.assertTrue(myProfilePage.state().waitForDisplayed(), "My Profile page is not displayed");
 
-        Response user = userSteps.getUser();
-        String ownerId = ResponseUtils.getValueFromResponseByKey(user, Keys.USER_ID).toString();
         String postMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
-        Response createPost = wallSteps.createPost(postMessage);
-        int postId = ResponseUtils.getValueFromResponseByKey(createPost, Keys.POST_ID);
+        PostResponse post = wallSteps.createPost(postMessage);
+        int postId = post.getResponse().getPost_id();
+        int ownerId = TestDataConfig.getOwnerId();
         Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
-        Assert.assertTrue(myProfilePage.getAuthor().contains(ownerId), "Post author is incorrect");
+        Assert.assertTrue(myProfilePage.getAuthor().contains(String.valueOf(ownerId)), "Post author is incorrect");
 
         String editedMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
-        Response savePhoto = photoSteps.saveFile(IMAGE_PATH);
-        int photoId = ResponseUtils.getValueFromResponseByKey(savePhoto, Keys.PHOTO_ID);
-        String photo = String.format("photo%s_%d", ownerId, photoId);
+        PhotoResponse savePhoto = photoSteps.saveFile(IMAGE_PATH);
+        int photoId = savePhoto.getResponse().get(0).getId();
+        String photo = String.format("photo%d_%d", ownerId, photoId);
         wallSteps.editPost(postId, editedMessage, photo);
         Assert.assertEquals(myProfilePage.getPostText(), editedMessage, "Post text is not updated");
         Assert.assertTrue(myProfilePage.getPhoto().contains(photo), "Photos are not the same");
@@ -73,12 +70,11 @@ public class VkTests extends BaseTest {
         String comment = RandomUtils.generateRandomString(Constants.COMMENT_LENGTH);
         wallSteps.addCommentToPost(postId, comment);
         myProfilePage.clickNextCommentLink();
-        Assert.assertTrue(myProfilePage.getReplyAuthor().contains(ownerId), "Comment is from incorrect user");
+        Assert.assertTrue(myProfilePage.getReplyAuthor().contains(String.valueOf(ownerId)), "Comment is from incorrect user");
 
         myProfilePage.clickLikeBtn();
-        Response likes = wallSteps.getLikesFromPost(postId);
-        String likeUserId = ResponseUtils.getValueFromResponseByKey(likes, Keys.LIKE_USER_ID).toString();
-        Assert.assertEquals(likeUserId, ownerId, "Like is from incorrect user");
+        LikesResponse likes = wallSteps.getLikesFromPost(postId);
+        Assert.assertTrue(likes.getResponse().getItems().contains(ownerId), "Like is not from expected user");
 
         wallSteps.deletePost(postId);
         Assert.assertFalse(myProfilePage.isPostDisplayed(), "Post is not deleted");

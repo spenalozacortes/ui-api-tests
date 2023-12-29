@@ -7,8 +7,8 @@ public class TestDataConfig {
 
     private static final ISettingsFile DATA = new JsonSettingsFile("testData.json");
 
-    public static String getOwnerId() {
-        return DATA.getValue("/owner_id").toString();
+    public static int getOwnerId() {
+        return (int) DATA.getValue("/owner_id");
     }
 
     public static String getVersion() {

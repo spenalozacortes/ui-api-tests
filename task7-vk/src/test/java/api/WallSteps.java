@@ -3,12 +3,15 @@ package api;
 import constants.Endpoints;
 import constants.Parameters;
 import constants.Values;
-import io.restassured.response.Response;
+import models.CommentResponse;
+import models.DeleteResponse;
+import models.LikesResponse;
+import models.PostResponse;
 import org.apache.http.HttpStatus;
 
 public class WallSteps extends BaseSteps {
 
-    public Response createPost(String message) {
+    public PostResponse createPost(String message) {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
@@ -18,10 +21,11 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response()
+                .as(PostResponse.class);
     }
 
-    public Response editPost(int id, String message, String attachment) {
+    public PostResponse editPost(int id, String message, String attachment) {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
@@ -33,10 +37,11 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response()
+                .as(PostResponse.class);
     }
 
-    public Response addCommentToPost(int id, String comment) {
+    public CommentResponse addCommentToPost(int id, String comment) {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
@@ -47,10 +52,11 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response()
+                .as(CommentResponse.class);
     }
 
-    public Response getLikesFromPost(int id) {
+    public LikesResponse getLikesFromPost(int id) {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
@@ -61,10 +67,11 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response()
+                .as(LikesResponse.class);
     }
 
-    public Response deletePost(int id) {
+    public DeleteResponse deletePost(int id) {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
@@ -74,6 +81,7 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response();
+                .extract().response()
+                .as(DeleteResponse.class);
     }
 }
