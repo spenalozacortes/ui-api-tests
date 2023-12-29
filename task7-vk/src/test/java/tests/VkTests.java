@@ -73,8 +73,8 @@ public class VkTests extends BaseTest {
         Assert.assertTrue(myProfilePage.getReplyAuthor().contains(String.valueOf(ownerId)), "Comment is from incorrect user");
 
         myProfilePage.clickLikeBtn();
-        LikesResponse likes = wallSteps.getLikesFromPost(postId);
-        Assert.assertTrue(likes.getResponse().getItems().contains(ownerId), "Like is not from expected user");
+        LikesResponse isLiked = wallSteps.getIsLiked(postId, ownerId);
+        Assert.assertEquals(isLiked.getResponse().getLiked(), Constants.LIKED, "Like is not from expected user");
 
         wallSteps.deletePost(postId);
         Assert.assertFalse(myProfilePage.isPostDisplayed(), "Post is not deleted");

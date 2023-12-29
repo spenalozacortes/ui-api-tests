@@ -50,12 +50,13 @@ public class WallSteps extends BaseSteps {
                 .as(CommentResponse.class);
     }
 
-    public LikesResponse getLikesFromPost(int id) {
+    public LikesResponse getIsLiked(int postId, int userId) {
         return getBaseReq()
+                .queryParam(Parameters.USER_ID, userId)
                 .queryParam(Parameters.TYPE, ObjectType.POST)
-                .queryParam(Parameters.ITEM_ID, id)
+                .queryParam(Parameters.ITEM_ID, postId)
                 .when()
-                .get(Endpoints.GET_LIKES)
+                .get(Endpoints.IS_LIKED)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
