@@ -20,4 +20,8 @@ public class CredentialsConfig {
     public static String getAccessToken() {
         return CREDENTIALS.getValue("/access_token").toString();
     }
+
+    public static int getOwnerId() {
+        return (int) CREDENTIALS.getValue("/owner_id");
+    }
 }

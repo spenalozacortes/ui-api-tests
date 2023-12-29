@@ -13,7 +13,11 @@ public class EnvironmentConfig {
         return ENVIRONMENT.getValue("/url").toString();
     }
 
-    public static String getBaseUri() {
-        return ENVIRONMENT.getValue("/baseUri").toString();
+    public static String getApiUri() {
+        return ENVIRONMENT.getValue("/apiUri").toString();
+    }
+
+    public static String getVersion() {
+        return ENVIRONMENT.getValue("/version").toString();
     }
 }

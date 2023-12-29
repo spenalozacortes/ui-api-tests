@@ -2,7 +2,7 @@ package api;
 
 import constants.Endpoints;
 import constants.Parameters;
-import constants.Values;
+import constants.ObjectType;
 import models.CommentResponse;
 import models.DeleteResponse;
 import models.LikesResponse;
@@ -60,7 +60,7 @@ public class WallSteps extends BaseSteps {
         return getBaseReq()
                 .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
                 .queryParam(Parameters.VERSION, VERSION)
-                .queryParam(Parameters.TYPE, Values.POST)
+                .queryParam(Parameters.TYPE, ObjectType.POST)
                 .queryParam(Parameters.ITEM_ID, id)
                 .when()
                 .get(Endpoints.GET_LIKES)

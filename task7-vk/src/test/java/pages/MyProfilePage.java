@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 
 public class MyProfilePage extends Form {
 
+    private static final String ID = "id";
     private final IButton likeBtn = getElementFactory().getButton(By.xpath("//*[contains(@class,'PostButtonReactions')]"), "Like button");
     private final ILabel postText = getElementFactory().getLabel(By.className("wall_post_text"), "Post text");
     private final ILabel authorLabel = getElementFactory().getLabel(By.xpath("//*[contains(@class, 'wall_post_cont')]"), "Author label");
@@ -28,7 +29,7 @@ public class MyProfilePage extends Form {
     }
 
     public String getAuthor() {
-        return authorLabel.getAttribute("id");
+        return authorLabel.getAttribute(ID);
     }
 
     public String getPhoto() {

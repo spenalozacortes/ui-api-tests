@@ -55,7 +55,7 @@ public class VkTests extends BaseTest {
         String postMessage = RandomUtils.generateRandomString(Constants.POST_LENGTH);
         PostResponse post = wallSteps.createPost(postMessage);
         int postId = post.getResponse().getPost_id();
-        int ownerId = TestDataConfig.getOwnerId();
+        int ownerId = CredentialsConfig.getOwnerId();
         Assert.assertEquals(myProfilePage.getPostText(), postMessage, "Post text is not as expected");
         Assert.assertTrue(myProfilePage.getAuthor().contains(String.valueOf(ownerId)), "Post author is incorrect");
 
