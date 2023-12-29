@@ -13,8 +13,6 @@ public class WallSteps extends BaseSteps {
 
     public PostResponse createPost(String message) {
         return getBaseReq()
-                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.MESSAGE, message)
                 .when()
                 .post(Endpoints.CREATE_POST)
@@ -27,8 +25,6 @@ public class WallSteps extends BaseSteps {
 
     public PostResponse editPost(int id, String message, String attachment) {
         return getBaseReq()
-                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.POST_ID, id)
                 .queryParam(Parameters.MESSAGE, message)
                 .queryParam(Parameters.ATTACHMENTS, attachment)
@@ -43,8 +39,6 @@ public class WallSteps extends BaseSteps {
 
     public CommentResponse addCommentToPost(int id, String comment) {
         return getBaseReq()
-                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.POST_ID, id)
                 .queryParam(Parameters.MESSAGE, comment)
                 .when()
@@ -58,8 +52,6 @@ public class WallSteps extends BaseSteps {
 
     public LikesResponse getLikesFromPost(int id) {
         return getBaseReq()
-                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.TYPE, ObjectType.POST)
                 .queryParam(Parameters.ITEM_ID, id)
                 .when()
@@ -73,8 +65,6 @@ public class WallSteps extends BaseSteps {
 
     public DeleteResponse deletePost(int id) {
         return getBaseReq()
-                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .queryParam(Parameters.VERSION, VERSION)
                 .queryParam(Parameters.POST_ID, id)
                 .when()
                 .post(Endpoints.DELETE_POST)

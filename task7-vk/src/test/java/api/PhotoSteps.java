@@ -18,8 +18,6 @@ public class PhotoSteps extends BaseSteps {
 
     public UploadServerResponse getUploadServer() {
         return getBaseReq()
-                .queryParam(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .queryParam(Parameters.VERSION, VERSION)
                 .when()
                 .get(Endpoints.GET_UPLOAD_SERVER)
                 .then()
@@ -47,10 +45,7 @@ public class PhotoSteps extends BaseSteps {
         int server = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.SERVER);
         String photo = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.PHOTO);
         String hash = ResponseUtils.getValueFromResponseByKey(transferFileResponse, Keys.HASH);
-        return getBaseReq()
-                .contentType(ContentType.MULTIPART)
-                .multiPart(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .multiPart(Parameters.VERSION, VERSION)
+        return getBaseReqMultipart()
                 .multiPart(Parameters.SERVER, server)
                 .multiPart(Parameters.PHOTO, photo)
                 .multiPart(Parameters.HASH, hash)
