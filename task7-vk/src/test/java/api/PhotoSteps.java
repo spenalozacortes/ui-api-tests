@@ -2,7 +2,6 @@ package api;
 
 import constants.Endpoints;
 import constants.Parameters;
-import io.restassured.http.ContentType;
 import models.PhotoResponse;
 import models.TransferFileResponse;
 import models.UploadServerResponse;
@@ -10,8 +9,6 @@ import org.apache.http.HttpStatus;
 import utils.JsonMapperUtils;
 
 import java.io.File;
-
-import static io.restassured.RestAssured.given;
 
 public class PhotoSteps extends BaseSteps {
 
@@ -28,9 +25,7 @@ public class PhotoSteps extends BaseSteps {
 
     public TransferFileResponse transferFile(String path) {
         String uploadUrl = getUploadServer().getUploadUrl();
-        String response = given()
-                .contentType(ContentType.MULTIPART)
-                .multiPart(Parameters.PHOTO, new File(path))
+        String response = getBaseMultipartReqSpec(Parameters.PHOTO, new File(path))
                 .when()
                 .post(uploadUrl)
                 .then()
@@ -42,10 +37,10 @@ public class PhotoSteps extends BaseSteps {
 
     public PhotoResponse saveFile(String path) {
         TransferFileResponse transferFileResponse = transferFile(path);
-        String response = getBaseReqMultipart()
-                .multiPart(Parameters.SERVER, transferFileResponse.getServer())
-                .multiPart(Parameters.PHOTO, transferFileResponse.getPhoto())
-                .multiPart(Parameters.HASH, transferFileResponse.getHash())
+        String response = getBaseReq()
+                .queryParam(Parameters.SERVER, transferFileResponse.getServer())
+                .queryParam(Parameters.PHOTO, transferFileResponse.getPhoto())
+                .queryParam(Parameters.HASH, transferFileResponse.getHash())
                 .when()
                 .post(Endpoints.SAVE_PHOTO)
                 .then()

@@ -7,6 +7,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
+import java.io.File;
+
 public abstract class BaseSteps {
 
     private static final String API_URI = EnvironmentConfig.getApiUri();
@@ -21,11 +23,10 @@ public abstract class BaseSteps {
                 .queryParam(Parameters.VERSION, VERSION);
     }
 
-    protected RequestSpecification getBaseReqMultipart() {
+    protected RequestSpecification getBaseMultipartReqSpec(String param, File paramSource) {
         return RestAssured.given()
                 .baseUri(API_URI)
                 .contentType(ContentType.MULTIPART)
-                .multiPart(Parameters.ACCESS_TOKEN, ACCESS_TOKEN)
-                .multiPart(Parameters.VERSION, VERSION);
+                .multiPart(param, paramSource);
     }
 }
