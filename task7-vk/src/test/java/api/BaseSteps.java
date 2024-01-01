@@ -15,6 +15,7 @@ public abstract class BaseSteps {
     private static final String ACCESS_TOKEN = CredentialsConfig.getAccessToken();
     private static final String VERSION = EnvironmentConfig.getVersion();
     protected static final String RESPONSE_PATH = "response";
+    protected static final String ROOT_PATH = ".";
 
     protected RequestSpecification getBaseReq() {
         return RestAssured.given()

@@ -1,31 +1,32 @@
 package api;
 
 import constants.Endpoints;
-import constants.Parameters;
 import constants.ObjectType;
+import constants.Parameters;
 import models.CommentResponse;
 import models.DeleteResponse;
 import models.LikeResponse;
 import models.PostResponse;
 import org.apache.http.HttpStatus;
-import utils.JsonMapperUtils;
 
 public class WallSteps extends BaseSteps {
 
     public PostResponse createPost(String message) {
-        String response = getBaseReq()
+        return getBaseReq()
                 .queryParam(Parameters.MESSAGE, message)
                 .when()
                 .post(Endpoints.CREATE_POST)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response().asString();
-        return JsonMapperUtils.deserialize(response, RESPONSE_PATH, PostResponse.class);
+                .extract()
+                .response()
+                .jsonPath()
+                .getObject(RESPONSE_PATH, PostResponse.class);
     }
 
     public PostResponse editPost(int id, String message, String attachment) {
-        String response = getBaseReq()
+        return getBaseReq()
                 .queryParam(Parameters.POST_ID, id)
                 .queryParam(Parameters.MESSAGE, message)
                 .queryParam(Parameters.ATTACHMENTS, attachment)
@@ -34,8 +35,10 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response().asString();
-        return JsonMapperUtils.deserialize(response, RESPONSE_PATH, PostResponse.class);
+                .extract()
+                .response()
+                .jsonPath()
+                .getObject(RESPONSE_PATH, PostResponse.class);
     }
 
     public DeleteResponse deletePost(int id) {
@@ -46,11 +49,13 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response().as(DeleteResponse.class);
+                .extract()
+                .response()
+                .as(DeleteResponse.class);
     }
 
     public CommentResponse addCommentToPost(int id, String comment) {
-        String response = getBaseReq()
+        return getBaseReq()
                 .queryParam(Parameters.POST_ID, id)
                 .queryParam(Parameters.MESSAGE, comment)
                 .when()
@@ -58,12 +63,14 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response().asString();
-        return JsonMapperUtils.deserialize(response, RESPONSE_PATH, CommentResponse.class);
+                .extract()
+                .response()
+                .jsonPath()
+                .getObject(RESPONSE_PATH, CommentResponse.class);
     }
 
     public LikeResponse getIsLiked(int postId, int userId) {
-        String response = getBaseReq()
+        return getBaseReq()
                 .queryParam(Parameters.USER_ID, userId)
                 .queryParam(Parameters.TYPE, ObjectType.POST)
                 .queryParam(Parameters.ITEM_ID, postId)
@@ -72,7 +79,9 @@ public class WallSteps extends BaseSteps {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.SC_OK)
-                .extract().response().asString();
-        return JsonMapperUtils.deserialize(response, RESPONSE_PATH, LikeResponse.class);
+                .extract()
+                .response()
+                .jsonPath()
+                .getObject(RESPONSE_PATH, LikeResponse.class);
     }
 }
